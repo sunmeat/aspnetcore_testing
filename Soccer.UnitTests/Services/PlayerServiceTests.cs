@@ -47,7 +47,8 @@ namespace Soccer.UnitTests.Application
 
             await service.Create(playerDto);
 
-            // перевірка, що сервіс передав репозиторію гравця з правильними даними
+            // перевірка, що метод Create був викликаний рівно один раз із об’єктом Player,
+            // усі властивості якого (Id, Name, Age, Position, TeamId) відповідають даним із playerDto
             await players.Received(1).Create(
                 Arg.Is<Player>(player =>
                     player.Id == playerDto.Id &&
