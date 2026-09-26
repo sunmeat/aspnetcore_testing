@@ -21,6 +21,7 @@ namespace Soccer.IntegrationTests.Repositories
                     "..",
                     "..",
                     "Soccer.Infrastructure",
+                    "RealFirebase",
                     "firebase.json"));
 
             // створюємо credentials з Firebase service account
