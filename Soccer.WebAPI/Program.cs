@@ -24,17 +24,57 @@ using Soccer.Infrastructure.Persistence;
 
 // додано файл Directory.Build.targets, який автоматично запускає тести перед білдом Soccer.WebAPI
 
+// =====================================================================================================
+
+// додано файл appsettings.json в корінь solution, який містить конфігурацію Firebase
+
 var builder = WebApplication.CreateBuilder(args);
 
+// визначаємо шлях до кореня solution
+string? solutionPath = builder.Environment.ContentRootPath;
+
+while (solutionPath != null &&
+       !File.Exists(Path.Combine(solutionPath, "Soccer.sln")))
+{
+    solutionPath = Directory.GetParent(solutionPath)?.FullName;
+}
+
+// перевіряємо, що Soccer.sln знайдено
+if (solutionPath == null)
+{
+    throw new DirectoryNotFoundException(
+        "Не знайдено корінь solution.");
+}
+
+// завантажуємо спільну конфігурацію з appsettings.json,
+// який знаходиться в корені solution
+string appsettingsPath =
+    Path.Combine(solutionPath, "appsettings.json");
+
+builder.Configuration.AddJsonFile(
+    appsettingsPath,
+    optional: false,
+    reloadOnChange: false);
+
+// отримуємо назву Firebase проєкту з конфігурації
+string projectId =
+    builder.Configuration["Firebase:ProjectId"]
+    ?? throw new InvalidOperationException(
+        $"Firebase:ProjectId не задано в {appsettingsPath}.");
+
+// визначаємо шлях до Firebase service account
 string firebasePath = Path.GetFullPath(
     Path.Combine(
-        builder.Environment.ContentRootPath,
-        "..",
+        solutionPath,
         "Soccer.Infrastructure",
         "RealFirebase",
         "firebase.json"));
 
-builder.Services.AddInfrastructure(firebasePath); // !!!
+// створюємо Infrastructure
+builder.Services.AddInfrastructure(
+    firebasePath,
+    projectId);
+
 builder.Services.AddApplication();
 
 builder.Services.AddControllers();
