@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
+using Microsoft.Extensions.Configuration;
 using Soccer.Domain.Entities;
 using Soccer.Infrastructure.Repositories;
 
@@ -12,6 +13,28 @@ namespace Soccer.IntegrationTests.Repositories
 
         public TeamRepositoryTests()
         {
+            // визначаємо шлях до конфігурації solution
+            string solutionPath = Path.GetFullPath(
+                Path.Combine(
+                    AppContext.BaseDirectory,
+                    "..",
+                    "..",
+                    "..",
+                    ".."));
+
+            // завантажуємо конфігурацію з appsettings.json
+            IConfiguration configuration =
+                new ConfigurationBuilder()
+                    .SetBasePath(solutionPath)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+            // отримуємо назву Firebase проєкту з конфігурації
+            string projectId =
+                configuration["Firebase:ProjectId"]
+                ?? throw new InvalidOperationException(
+                    "Firebase:ProjectId не задано в appsettings.json.");
+
             // визначаємо шлях до Firebase service account
             string firebasePath = Path.GetFullPath(
                 Path.Combine(
@@ -33,7 +56,7 @@ namespace Soccer.IntegrationTests.Repositories
             // створюємо реальне підключення до Firestore
             FirestoreDb db = new FirestoreDbBuilder
             {
-                ProjectId = "alex-odesa",
+                ProjectId = projectId,
                 Credential = credential
             }.Build();
 
