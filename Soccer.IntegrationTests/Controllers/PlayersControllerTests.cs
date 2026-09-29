@@ -1,4 +1,4 @@
-﻿using FluentAssertions;       // dotnet add package FluentAssertions
+using FluentAssertions;       // dotnet add package FluentAssertions
 using Google.Cloud.Firestore; // dotnet add package Google.Cloud.Firestore
 using Soccer.Application.DTO;
 using Soccer.Domain.Entities;
@@ -137,7 +137,7 @@ namespace Soccer.IntegrationTests.Controllers
         
         
         // підключення до локального Firestore Emulator:
-        [Fact]
+        [Fact(Skip = "Потрібно запустити локальний Firestore Emulator перед запуском цього тесту")]
         public async Task Create_ShouldAddPlayer()
         {
             // одноразово встановити Firebase CLI (Command Line Interface)
