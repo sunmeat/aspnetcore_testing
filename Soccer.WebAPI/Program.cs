@@ -20,6 +20,10 @@ using Soccer.Infrastructure.Persistence;
 // для інтеграційних тестів використовується xUnit, FluentAssertions та Microsoft.AspNetCore.Mvc.Testing.
 // інтеграційні тести перевіряють взаємодію між компонентами застосунку та Firestore.
 
+// =====================================================================================================
+
+// додано файл Directory.Build.targets, який автоматично запускає тести перед білдом Soccer.WebAPI
+
 var builder = WebApplication.CreateBuilder(args);
 
 string firebasePath = Path.GetFullPath(
