@@ -12,7 +12,8 @@ namespace Soccer.Infrastructure.DependencyInjection
     {
         public static void AddInfrastructure(
             this IServiceCollection services,
-            string firebasePath)
+            string firebasePath,
+            string projectId)
         {
             GoogleCredential credential =
                 CredentialFactory
@@ -21,14 +22,14 @@ namespace Soccer.Infrastructure.DependencyInjection
 
             FirestoreDb db = new FirestoreDbBuilder
             {
-                ProjectId = "alex-odesa",
+                ProjectId = projectId,
                 Credential = credential
             }.Build();
 
             services.AddSingleton(db);
 
-            services.AddScoped<IRepository<Team>, TeamRepository>(); // !!!
-            services.AddScoped<IRepository<Player>, PlayerRepository>(); // !!!
+            services.AddScoped<IRepository<Team>, TeamRepository>();
+            services.AddScoped<IRepository<Player>, PlayerRepository>();
 
             services.AddScoped<FirestoreSeeder>();
         }
