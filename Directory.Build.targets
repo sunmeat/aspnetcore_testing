@@ -1,0 +1,20 @@
+<Project>
+
+  <Target Name="RunTestsBeforeBuild"
+          BeforeTargets="Build"
+          Condition="
+            '$(MSBuildProjectName)' == 'Soccer.WebAPI'
+            and '$(SkipTestsBeforeBuild)' != 'true'
+          ">
+
+    <Message Text="=== Running all tests before Soccer.WebAPI build ==="
+             Importance="high" />
+
+    <Exec Command="dotnet test &quot;$(MSBuildThisFileDirectory)Soccer.sln&quot; --no-restore -p:SkipTestsBeforeBuild=true" />
+
+    <Message Text="=== All tests passed. Continuing build ==="
+             Importance="high" />
+
+  </Target>
+
+</Project>
