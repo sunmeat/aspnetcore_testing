@@ -27,6 +27,7 @@ using Soccer.Infrastructure.Persistence;
 // =====================================================================================================
 
 // додано файл appsettings.json в корінь solution, який містить конфігурацію Firebase
+// туди треба вписати ID вашого Firebase проєкту, який можна знайти в Firebase Console > Project settings > General > Your project > Project ID
 
 var builder = WebApplication.CreateBuilder(args);
 
